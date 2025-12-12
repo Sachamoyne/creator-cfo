@@ -57,7 +57,7 @@ export default async function AnalyticsPage() {
       _key: key,
     } as any);
   }
-  const monthMap = new Map(months.map((m) => [m._key, m]));
+  const monthMap = new Map(months.map((m) => [(m as any)._key || (m as any).name, m]));
 
   transactions.forEach((t) => {
     const d = new Date(t.date);

@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
@@ -90,7 +91,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex h-screen w-full items-center justify-center bg-slate-950 p-4">
       <Card className="w-full max-w-md border-border bg-card shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-card-foreground">
@@ -105,9 +106,9 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-foreground">
+              <Label htmlFor="email" className="text-foreground">
                 Email
-              </label>
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -120,9 +121,9 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-foreground">
+              <Label htmlFor="password" className="text-foreground">
                 Mot de passe
-              </label>
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -165,25 +166,24 @@ export default function LoginPage() {
                 : (isLogin ? "Se connecter" : "Créer mon compte")}
             </Button>
           </form>
-          
-          <div className="mt-4 text-center">
-            <button
-              type="button"
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError("");
-                setSuccess("");
-                setEmail("");
-                setPassword("");
-              }}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {isLogin 
-                ? "Pas encore de compte ? S'inscrire"
-                : "Déjà un compte ? Se connecter"}
-            </button>
-          </div>
         </CardContent>
+        <CardFooter className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setError("");
+              setSuccess("");
+              setEmail("");
+              setPassword("");
+            }}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {isLogin 
+              ? "Pas encore de compte ? S'inscrire"
+              : "Déjà un compte ? Se connecter"}
+          </button>
+        </CardFooter>
       </Card>
     </div>
   );

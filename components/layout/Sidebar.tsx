@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, Database, Settings, User, List, PieChart } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { LayoutDashboard, Database, Settings, User, List, PieChart, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -14,6 +16,19 @@ const navigation = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.push("/login");
+    router.refresh();
+  };
+
+  // Extract name from email (part before @)
+  const userName = session?.user?.email 
+    ? session.user.email.split("@")[0].charAt(0).toUpperCase() + session.user.email.split("@")[0].slice(1)
+    : "Utilisateur";
 
   return (
     <div className="h-full w-full flex flex-col bg-[#020817] text-white">
@@ -49,17 +64,30 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Faux Profil Utilisateur (Simulation) */}
-      <div className="border-t border-slate-800 p-4 flex-shrink-0">
+      {/* Profil Utilisateur avec Bouton Déconnexion */}
+      <div className="border-t border-slate-800 p-4 flex-shrink-0 space-y-3">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-slate-700 flex items-center justify-center text-slate-300">
             <User size={18} />
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-white">Sacha M.</span>
-            <span className="text-xs text-slate-500">Pro Plan</span>
+          <div className="flex flex-col flex-1 min-w-0">
+            <span className="text-sm font-medium text-white truncate">
+              {userName}
+            </span>
+            <span className="text-xs text-slate-500 truncate">
+              {session?.user?.email || "Non connecté"}
+            </span>
           </div>
         </div>
+        <Button
+          onClick={handleSignOut}
+          variant="outline"
+          size="sm"
+          className="w-full border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-600"
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          Déconnexion
+        </Button>
       </div>
     </div>
   );
